@@ -127,6 +127,12 @@
   td.l, th.l { text-align: left; }
   td input[type=number] { max-width: 150px; text-align: center; }
   table.nm-tbl td.mono { font-family: var(--mono); }
+  table.cmp-tbl td { padding: 10px; }
+  .pick.pick-wrap { display: inline-flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 2px 4px; border-radius: 16px; max-width: 250px; }
+  .pick.pick-wrap label { flex: none; }
+  .pick span { white-space: nowrap; }
+  table.cmp-tbl { table-layout: fixed; }
+  table.cmp-tbl th:first-child { width: 30%; }
   table.nm-tbl td input[type=number] { max-width: 160px; }
   details.howto.adv summary::after { content: "심화"; background: var(--gold); color: #fff; }
   .adv-body { padding: 12px 16px 14px; }
@@ -788,12 +794,23 @@
     </div>
 
     <div class="sub">
-      <p class="sub-t"><span class="n">(2)</span>새 예측 결과 보기에는 성능 점수(평가 지표)가 나오지 않아요. 왜 그럴까요?</p>
+      <p class="sub-t"><span class="n">(2)</span>테스트 데이터와 새로운 데이터를 비교해 알맞은 것을 골라 보세요.</p>
+      <div class="tw"><table class="cmp-tbl">
+        <thead><tr><th class="l">질문</th><th>테스트 데이터<small class="th-u">남은 데이터 (Remaining Data)</small></th><th>새로운 데이터<small class="th-u">새로 불러온 파일</small></th></tr></thead>
+        <tbody>
+          <tr><td class="l">모델이 학습할 때 본 적이 있나요?</td><td><div class="pick pick-wrap" role="radiogroup"><label><input type="radio" name="cmp_seen_test" value="있다" data-k="cmp_seen_test"><span>있다</span></label><label><input type="radio" name="cmp_seen_test" value="없다" data-k="cmp_seen_test"><span>없다</span></label><label><input type="radio" name="cmp_seen_test" value="있을 수도 있고 없을 수도 있다" data-k="cmp_seen_test"><span>있을 수도 있고 없을 수도 있다</span></label></div></td><td><div class="pick pick-wrap" role="radiogroup"><label><input type="radio" name="cmp_seen_new" value="있다" data-k="cmp_seen_new"><span>있다</span></label><label><input type="radio" name="cmp_seen_new" value="없다" data-k="cmp_seen_new"><span>없다</span></label><label><input type="radio" name="cmp_seen_new" value="있을 수도 있고 없을 수도 있다" data-k="cmp_seen_new"><span>있을 수도 있고 없을 수도 있다</span></label></div></td></tr>
+          <tr><td class="l">정답(종속 변수 값)이 들어 있나요?</td><td><div class="pick " role="radiogroup"><label><input type="radio" name="cmp_ans_test" value="있다" data-k="cmp_ans_test"><span>있다</span></label><label><input type="radio" name="cmp_ans_test" value="없다" data-k="cmp_ans_test"><span>없다</span></label></div></td><td><div class="pick " role="radiogroup"><label><input type="radio" name="cmp_ans_new" value="있다" data-k="cmp_ans_new"><span>있다</span></label><label><input type="radio" name="cmp_ans_new" value="없다" data-k="cmp_ans_new"><span>없다</span></label></div></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <p class="sub-t"><span class="n">(3)</span>새 예측 결과 보기에는 성능 점수(평가 지표)가 나오지 않아요. 왜 그럴까요?</p>
       <textarea data-k="nmNoScore"></textarea>
     </div>
 
     <div class="sub">
-      <p class="sub-t"><span class="n">(3)</span>오렌지3 작업 화면을 캡처해 붙여 넣으세요. (위젯 연결과 결과 창이 함께 보이게)</p>
+      <p class="sub-t"><span class="n">(4)</span>오렌지3 작업 화면을 캡처해 붙여 넣으세요. (위젯 연결과 결과 창이 함께 보이게)</p>
       <div class="paste" tabindex="0" data-img="img6" role="button" aria-label="CH 6 캡처 붙여넣기 칸">
         <div class="paste-empty"><b>여기를 클릭한 뒤 Ctrl+V</b>캡처하기: <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> → 영역을 끌어 고르기<br>이미지 파일을 끌어다 놓아도 돼요.</div>
         <img class="paste-img" alt="붙여 넣은 CH 6 캡처" hidden>
