@@ -148,6 +148,15 @@
   .reveal-t { margin: 0 0 6px; font-weight: 700; color: var(--ink); }
   .reveal ul { margin: 0; padding-left: 20px; } .reveal li { margin: 4px 0; line-height: 1.65; }
   @keyframes revealIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  /* 과제별 PDF 저장 */
+  .pdf-card { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; background: var(--accent-weak); padding: 14px 16px; }
+  .pdf-t { margin: 0; font-weight: 700; color: var(--ink); }
+  .pdf-d { margin: 2px 0 0; font-size: 13.5px; color: var(--ink-2); }
+  .pdf-msg { margin: 4px 0 0; font-size: 13.5px; color: var(--warn); font-weight: 600; }
+  .pdf-msg:empty { display: none; }
+  .pdf-btn { flex: none; font: inherit; font-size: 15px; font-weight: 700; border: 0; border-radius: 10px; padding: 10px 18px; cursor: pointer; background: var(--accent); color: var(--accent-ink); }
+  .pdf-btn:hover { filter: brightness(1.07); }
+  .print-head { display: none; }
   .num-unit { display: inline-flex; align-items: center; gap: 8px; }
   .num-unit .unit { color: var(--muted); font-weight: 600; }
 
@@ -314,11 +323,14 @@
   .top .who input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(215,154,18,.3); }
   .prog { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: .85rem; color: var(--hero-muted); }
   .prog b { color: var(--gold); }
-  .trend { display: block; width: 100%; height: 34px; margin-top: 4px; }
-  .trend .bg { fill: none; stroke: rgba(255,255,255,.28); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-  .trend .area { fill: url(#trendFill); }
-  .trend .done { fill: none; stroke: var(--gold); stroke-width: 2.6; vector-effect: non-scaling-stroke; }
-  #trendClip rect { transform-origin: 0 0; transition: transform .45s; }
+  .tprog { max-width: 1240px; margin: 0 auto; padding: 6px 18px 10px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 22px; }
+  .tp { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--hero-muted); min-width: 0; }
+  .tp b { color: var(--gold); white-space: nowrap; }
+  .tp-nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tp .bar { flex: 1 1 60px; min-width: 50px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.14); overflow: hidden; }
+  .tp .bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #3fc485, #f0b84a); transition: width .4s; }
+  .tp-n { font-family: var(--mono); color: var(--hero-ink); min-width: 3.2em; text-align: right; }
+  .tp.done .tp-n::before { content: "✓ "; color: #4fe0a0; }
 
   /* ── 본문: 왼쪽 미션 목록 + 오른쪽 한 CH ── */
   .wrap { max-width: 1240px; margin: 0 auto; padding: 26px 18px 80px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 30px; align-items: start; }
@@ -396,6 +408,7 @@
     .brand small { display: none; }
     .q-h h2 { font-size: 1.6rem; }
     .top { position: static; }
+    .tprog { grid-template-columns: 1fr; gap: 4px; }
     table.concept-tbl td:first-child { white-space: normal; width: 34%; }
   }
 
@@ -404,7 +417,7 @@
     .task-kind, .task-txt p { color: #333 !important; }
     body { background: #fff; color: #000; font-size: 13px; }
     .wrap { padding: 0; max-width: none; }
-    .reveal-hint, details.howto, .tip, .ds-sec, .chart-art-box, .paste-tools, .paste-empty, nav.missions, .pager, .trend, .concept { display: none !important; }
+    .reveal-hint, details.howto, .tip, .ds-sec, .chart-art-box, .paste-tools, .paste-empty, nav.missions, .pager, .tprog, .concept { display: none !important; }
     .top { position: static; border: 0; } .wrap { display: block; } #main > section.q[hidden] { display: block !important; } #main > section.q { margin-top: 18px !important; break-inside: auto; }
     .head { display: block; background: #fff !important; color: #000; border: 1px solid #999; padding: 12px 16px; }
     .head p, .who label { color: #333 !important; }
@@ -414,6 +427,19 @@
     .pick span { padding: 3px 8px; }
     .pick input:checked + span { background: #000 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .check { display: none; }
+    .top, .pdf-card, .sim { display: none !important; }
+    details.howto.adv { display: block !important; border: 0; }
+    details.howto.adv > summary { padding: 0 0 6px; border: 0; }
+    details.howto.adv > summary::before, details.howto.adv > summary::after { display: none; }
+    body.printing #main > section.q { display: none !important; }
+    body.printing #main > section.q.pr-on { display: block !important; break-before: auto; }
+    body.printing #main > section.q.pr-on ~ section.q.pr-on { break-before: page; }
+    .print-head { display: block; border-bottom: 2px solid #000; padding: 0 0 8px; margin: 0 0 12px; }
+    .print-head h1 { margin: 0; font-size: 18px; }
+    .print-head p { margin: 4px 0 0; font-size: 13px; }
+    textarea { resize: none; overflow: visible; }
+    .paste { border: 1px solid #999 !important; min-height: 0; }
+    .paste:not(.has) { display: none; }
   }
 </style>
 </head>
@@ -430,19 +456,13 @@
     </div>
     <div class="prog">채운 칸 <b id="progN">0</b>/<span id="progT">0</span></div>
   </div>
-  <svg class="trend" viewBox="0 0 1000 34" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fe0a0" stop-opacity=".55"/><stop offset="1" stop-color="#4fe0a0" stop-opacity="0"/></linearGradient>
-      <clipPath id="trendClip"><rect x="0" y="0" width="1000" height="34" style="transform: scaleX(0)"/></clipPath>
-    </defs>
-    <path id="trendBg" class="bg"/>
-    <g clip-path="url(#trendClip)"><path id="trendArea" class="area"/><path id="trendDone" class="done"/></g>
-  </svg>
+  <div class="tprog" id="tprog" aria-label="과제별 진행률"></div>
 </header>
 
 <div class="wrap">
   <nav class="missions" id="nav" aria-label="학습지 목차"></nav>
   <main id="main">
+    <div class="print-head" id="printHead" aria-hidden="true"></div>
 
   <!-- 데이터셋 -->
   <section class="q ds-sec">
@@ -609,6 +629,12 @@
       </div>
       <div class="paste-tools"><button type="button" class="btn-sub danger" data-imgdel="img3" hidden>캡처 지우기</button><span class="s-msg" data-imgmsg="img3"></span></div>
     </div>
+    <div class="pdf-card">
+      <div><p class="pdf-t">📄 과제 1 다 했나요? PDF로 저장해 제출하세요</p>
+      <p class="pdf-d">과제 1(단순 선형 회귀 분석 (통계적))에 적은 답과 붙여 넣은 캡처만 모아 PDF로 만듭니다. 인쇄 창이 열리면 <b>대상</b>을 <b>PDF로 저장</b>으로 고른 뒤 <b>저장</b>을 누르세요.</p>
+      <p class="pdf-msg" data-pdfmsg="1"></p></div>
+      <button type="button" class="pdf-btn" data-pdf="1">과제 1 PDF로 저장</button>
+    </div>
   </section>
 
   <!-- 4 -->
@@ -690,6 +716,12 @@
         <img class="paste-img" alt="붙여 넣은 CH 4 캡처" hidden>
       </div>
       <div class="paste-tools"><button type="button" class="btn-sub danger" data-imgdel="img5" hidden>캡처 지우기</button><span class="s-msg" data-imgmsg="img5"></span></div>
+    </div>
+    <div class="pdf-card">
+      <div><p class="pdf-t">📄 과제 2 다 했나요? PDF로 저장해 제출하세요</p>
+      <p class="pdf-d">과제 2(다중 선형 회귀 분석 (통계적))에 적은 답과 붙여 넣은 캡처만 모아 PDF로 만듭니다. 인쇄 창이 열리면 <b>대상</b>을 <b>PDF로 저장</b>으로 고른 뒤 <b>저장</b>을 누르세요.</p>
+      <p class="pdf-msg" data-pdfmsg="2"></p></div>
+      <button type="button" class="pdf-btn" data-pdf="2">과제 2 PDF로 저장</button>
     </div>
   </section>
 
@@ -816,6 +848,12 @@
         <img class="paste-img" alt="붙여 넣은 CH 6 캡처" hidden>
       </div>
       <div class="paste-tools"><button type="button" class="btn-sub danger" data-imgdel="img6" hidden>캡처 지우기</button><span class="s-msg" data-imgmsg="img6"></span></div>
+    </div>
+    <div class="pdf-card">
+      <div><p class="pdf-t">📄 과제 3 다 했나요? PDF로 저장해 제출하세요</p>
+      <p class="pdf-d">과제 3(단순 선형 회귀 분석 (기계학습 기반))에 적은 답과 붙여 넣은 캡처만 모아 PDF로 만듭니다. 인쇄 창이 열리면 <b>대상</b>을 <b>PDF로 저장</b>으로 고른 뒤 <b>저장</b>을 누르세요.</p>
+      <p class="pdf-msg" data-pdfmsg="3"></p></div>
+      <button type="button" class="pdf-btn" data-pdf="3">과제 3 PDF로 저장</button>
     </div>
   </section>
     <div class="pager" id="pager"><button type="button" class="pbtn" id="prevBtn"></button><button type="button" class="pbtn primary" id="nextBtn"></button></div>
@@ -1329,7 +1367,12 @@ function renderNav() {
 function updateProg() {
   const all = SECS.flatMap(slots), n = all.filter(filled).length;
   $("#progN").textContent = n; $("#progT").textContent = all.length;
-  document.querySelector("#trendClip rect").style.transform = `scaleX(${all.length ? n / all.length : 0})`;
+  // 과제별 진행률 (데이터셋 제외: CH 1~3 / CH 4 / CH 5~6)
+  const GROUPS = [["과제 1", "단순 회귀 (통계적)", [1, 2, 3]], ["과제 2", "다중 회귀 (통계적)", [4]], ["과제 3", "기계학습 회귀", [5, 6]]];
+  $("#tprog").innerHTML = GROUPS.map(([no, nm, idx]) => {
+    const ks = idx.flatMap(i => slots(SECS[i])), k = ks.filter(filled).length, pct = ks.length ? Math.round(k / ks.length * 100) : 0;
+    return `<div class="tp ${pct === 100 ? "done" : ""}"><b>${no}</b><span class="tp-nm">${nm}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="tp-n">${pct}%</span></div>`;
+  }).join("");
   renderNav();
 }
 function go(i, scroll = true) {
@@ -1349,15 +1392,6 @@ document.addEventListener("input", () => setTimeout(updateProg, 0));
 const _renderShots = renderShots;
 renderShots = function () { _renderShots(); updateProg(); };
 
-// 상단 진행 막대: 실제 데이터에서 TV 광고비 순으로 매출(Sales)을 이동 평균한 추세선
-(() => {
-  const pts = body.map(r => r.map(Number)).sort((a, b) => a[0] - b[0]).map(r => r[3]);
-  const w = 15, sm = pts.map((_, i) => { const a = pts.slice(Math.max(0, i - w), i + w + 1); return a.reduce((x, y) => x + y, 0) / a.length; });
-  const lo = Math.min(...sm), hi = Math.max(...sm);
-  const d = sm.map((v, i) => `${i ? "L" : "M"}${(i / (sm.length - 1) * 1000).toFixed(1)},${(30 - (v - lo) / (hi - lo) * 26).toFixed(1)}`).join(" ");
-  $("#trendBg").setAttribute("d", d); $("#trendDone").setAttribute("d", d);
-  $("#trendArea").setAttribute("d", d + " L1000,34 L0,34 Z");
-})();
 
 // ── 회귀선 시뮬레이터 (숫자 결과는 보여 주지 않음) ──
 (() => {
@@ -1416,6 +1450,34 @@ renderShots = function () { _renderShots(); updateProg(); };
     }
   });
 })();
+
+// ── 과제별 PDF로 저장 (인쇄 창에서 'PDF로 저장') ──
+const TASK_OF = [0, 1, 1, 1, 2, 3, 3];                     // SECS 순서: 데이터셋, CH 1~6
+const TASK_NAME = { 1: "과제 1 · 단순 선형 회귀 분석 (통계적)", 2: "과제 2 · 다중 선형 회귀 분석 (통계적)", 3: "과제 3 · 단순 선형 회귀 분석 (기계학습 기반)" };
+document.querySelectorAll("[data-pdf]").forEach(btn => btn.addEventListener("click", () => {
+  const n = Number(btn.dataset.pdf), m = document.querySelector(`[data-pdfmsg="${n}"]`);
+  const sid = String(state.id || "").trim(), sname = String(state.name || "").trim();
+  if (!sid || !sname) { m.textContent = "맨 위에 학번과 이름을 먼저 적어 주세요."; window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  m.textContent = "";
+  const today = new Date().toLocaleDateString("ko-KR");
+  $("#printHead").innerHTML = `<h1>광고비와 매출 사이의 관계 알아보기 — ${TASK_NAME[n]}</h1><p>학번 ${sid.replace(/[<>&]/g, "")} · 이름 ${sname.replace(/[<>&]/g, "")} · ${today}</p>`;
+  SECS.forEach((sec, i) => sec.classList.toggle("pr-on", TASK_OF[i] === n));
+  // 서술형 답이 잘리지 않게 높이를 내용만큼 늘리고, 심화는 펼쳐서 인쇄
+  const tas = [...document.querySelectorAll("section.pr-on textarea")].map(t => [t, t.style.height]);
+  tas.forEach(([t]) => { t.style.height = "auto"; t.style.height = (t.scrollHeight + 4) + "px"; });
+  const adv = [...document.querySelectorAll("section.pr-on details.adv")].map(d => [d, d.open]);
+  adv.forEach(([d]) => d.open = true);
+  const title = document.title;
+  document.title = `광고비와매출_과제${n}_${sid}_${sname}`.replace(/[\\/:*?"<>|]/g, "");   // PDF 파일 이름
+  document.body.classList.add("printing");
+  const done = () => {
+    document.body.classList.remove("printing"); document.title = title;
+    tas.forEach(([t, h]) => t.style.height = h); adv.forEach(([d, o]) => d.open = o);
+    window.removeEventListener("afterprint", done);
+  };
+  window.addEventListener("afterprint", done);
+  window.print();
+}));
 
 fill(); renderShots(); checkAll(); go(CUR, false);
 </script>
