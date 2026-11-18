@@ -518,9 +518,17 @@
   .corr-guide .lv, .corr-guide b { font-family: var(--body); }   /* 강함·보통·약함 기준도 본문 글꼴로 */
   details.howto.adv { margin-top: 14px; }   /* (4) 아래로 옮긴 심화 상자 위 간격 */
   /* 단계 제목: Black Han Sans처럼 납작한 모양, 굵기는 한 단계 얇은 도현체(Do Hyeon) */
-  .q-h h2 { font-family: "Do Hyeon", "Black Han Sans", "Malgun Gothic", sans-serif; font-weight: 400; font-size: 1.8rem; line-height: 1.25; letter-spacing: .01em; }
+  .q-h h2 { font-family: "Black Han Sans", "Do Hyeon", "Malgun Gothic", sans-serif; font-weight: 400; font-size: 1.8rem; line-height: 1.25; letter-spacing: .01em; }
   @media (max-width: 860px) { .q-h h2 { font-size: 1.45rem; } }
-  .brand h1 { font-family: "Do Hyeon", "Black Han Sans", "Malgun Gothic", sans-serif; font-weight: 400; font-size: 1.55rem; letter-spacing: .01em; }   /* 맨 위 제목도 같은 글꼴 */
+  .brand h1 { font-family: "Black Han Sans", "Do Hyeon", "Malgun Gothic", sans-serif; font-weight: 400; font-size: 1.45rem; letter-spacing: .01em; }   /* 맨 위 제목도 같은 글꼴 */
+  /* 6단계 새 지역 표: 가로·세로 간격 좁게 */
+  .roles th:first-child, .roles td:first-child,
+  .corr-tbl th:first-child, .corr-tbl td:first-child,
+  .sl-tbl th:first-child, .sl-tbl td:first-child { text-align: center; }   /* 속성 칸 가운데 */
+  table.nm-tbl { width: 100%; table-layout: fixed; }
+  table.nm-tbl th, table.nm-tbl td { width: 33.33%; }   /* 세 칸 폭을 똑같이 */
+  table.nm-tbl th, table.nm-tbl td { padding: 4px 18px; }
+  table.nm-tbl td input[type=number] { padding: 4px 10px; max-width: 150px; }
   #nextBtn { margin-left: auto; }   /* 이전 버튼이 없는 첫 화면에서도 '다음'은 오른쪽에 */
   .sim[data-sim="stat"] .sim-vars button[aria-checked="true"] { background: var(--tr); }
 
@@ -562,7 +570,12 @@
     <div class="q-h"><span class="q-num ds"><span><small>DATA</small>CSV</span></span><h2>데이터셋 내려받기 · 살펴보기</h2></div>
     <p class="ds-intro">캐글에서 제공하는 광고비와 매출액 데이터셋(<a href="https://www.kaggle.com/datasets/ashydv/advertising-dataset" target="_blank" rel="noopener">kaggle.com/datasets/ashydv/advertising-dataset</a>)을 <b>오렌지3</b>로 분석하면서 단계마다 빈칸을 채워 보세요. 적은 내용은 새로고침해도 남아 있지만, <b>창을 닫으면 지워집니다.</b></p>
     <p class="q-lead">아래 버튼으로 <b>advertising.csv</b>를 내려받아 csv 파일을 열어 보세요. 아래 표에서 데이터를 바로 확인할 수도 있습니다.</p>
-    <p class="sub-t" style="flex-wrap: wrap; column-gap: 8px; row-gap: 0">각 속성의 뜻 <small class="unit-note">(한 행 = 한 지역에서의 광고비와 판매량)</small></p>
+    <div class="dl-row">
+      <button class="dl" type="button" id="dlBtn">advertising.csv 내려받기</button>
+      <span class="df-shape" id="dfShape"></span>
+    </div>
+    <div class="df-wrap"><table class="df" id="df"></table></div>
+    <p class="sub-t" style="flex-wrap: wrap; column-gap: 8px; row-gap: 0; margin-top: 28px">각 속성의 뜻 <small class="unit-note">(한 행 = 한 지역에서의 광고비와 판매량)</small></p>
     <div class="tw attr-desc"><table>
       <tr><th class="l">속성</th><th class="l">설명</th><th>단위</th></tr>
       <tr><td class="l"><span class="attr">TV</span></td><td class="l">TV 광고에 쓴 비용</td><td>천 달러</td></tr>
@@ -571,11 +584,6 @@
       <tr><td class="l"><span class="attr">Sales</span></td><td class="l">제품 판매량(매출)</td><td>천 개</td></tr>
     </table></div>
     <p class="unit-ex">예) 첫 번째 행 TV = 230.1 → TV 광고비 약 23만 100달러, Sales = 22.1 → 약 2만 2,100개 판매</p>
-    <div class="dl-row">
-      <button class="dl" type="button" id="dlBtn">advertising.csv 내려받기</button>
-      <span class="df-shape" id="dfShape"></span>
-    </div>
-    <div class="df-wrap"><table class="df" id="df"></table></div>
   </section>
 
   <!-- 1 -->
@@ -632,7 +640,7 @@
       <p class="sub-t"><span class="n">(1)</span>속성별 상관계수와 상관관계의 방향 · 정도</p>
       <p class="corr-guide"><span>상관관계의 정도는 상관계수의 절댓값 <b>|r|</b>로 판단해요.</span>
         <span class="lv"><i class="s3"></i>강함 0.7 ≤ |r|</span><span class="lv"><i class="s2"></i>보통 0.3 ≤ |r| &lt; 0.7</span><span class="lv"><i class="s1"></i>약함 |r| &lt; 0.3</span></p>
-      <div class="tw"><table>
+      <div class="tw"><table class="corr-tbl">
         <tr><th class="l">독립 변수 ↔ Sales</th><th>상관계수 r</th><th>방향</th><th>정도</th></tr>
         <tbody id="corrRows"></tbody>
       </table></div>
@@ -699,7 +707,7 @@
 
     <div class="sub">
       <p class="sub-t"><span class="n">(3)</span>독립 변수별 단순 선형 회귀 모델의 평가 지표</p>
-      <div class="tw"><table class="mt">
+      <div class="tw"><table class="mt sl-tbl">
         <thead><tr><th class="l">모델 (독립 변수 → Sales)</th><th>MSE<small>평균제곱오차</small></th><th>MAE<small>평균절대오차</small></th><th>R²<small>결정 계수</small></th></tr></thead>
         <tbody id="slRows"></tbody>
       </table></div>
@@ -797,13 +805,14 @@
         <tr><th>절편 <i>b</i><sub>0</sub><small class="th-u">intercept</small></th><th>TV 계수 <i>b</i><sub>1</sub></th><th>Radio 계수 <i>b</i><sub>2</sub></th><th>Newspaper 계수 <i>b</i><sub>3</sub></th></tr>
         <tr><td><input type="number" step="any" data-k="co_int" placeholder="b₀"></td><td><input type="number" step="any" data-k="co_tv" placeholder="b₁"></td><td><input type="number" step="any" data-k="co_radio" placeholder="b₂"></td><td><input type="number" step="any" data-k="co_news" placeholder="b₃"></td></tr>
       </table></div>
-      <p class="sub-t" style="margin-top:14px">다른 매체의 광고비가 같다면, 광고비를 1(천 달러) 더 썼을 때 Sales가 가장 많이 늘어나는 매체는 무엇인가요?</p>
+      <p class="sub-t" style="margin-top:28px">다른 매체의 광고비가 같다면, 광고비를 1(천 달러) 더 썼을 때 Sales가 가장 많이 늘어나는 매체는 무엇인가요?</p>
       <div class="tw"><table>
         <tr><th>매체</th></tr>
         <tr><td><select data-k="coBest"><option value="">선택하세요</option><option>TV</option><option>Radio</option><option>Newspaper</option></select></td></tr>
       </table></div>
       <div class="check" id="coCheck"></div>
-      <textarea data-k="coWhy" placeholder="회귀 계수를 근거로 설명해 보세요. 3단계에서 Sales를 가장 잘 설명한 모델과 결과가 같나요, 다른가요?" style="margin-top:10px"></textarea>
+      <p class="sub-t" style="margin-top:18px">회귀 계수를 근거로 그 이유를 설명해 보세요. 3단계에서 Sales를 가장 잘 설명한 모델과 결과가 같나요, 다른가요?</p>
+      <textarea data-k="coWhy"></textarea>
         <p class="reveal-hint" id="coHint"></p>
         <div class="reveal" id="coReveal" hidden>
           <p class="reveal-t">해설: 왜 R²와 회귀 계수의 결과가 다를까요?</p>
